@@ -1,0 +1,19 @@
+version: "3.1"
+
+services:
+  GE-postgres:
+    image: bitnami/postgresql:14
+    container_name: GE-postgres
+    restart: always
+    network_mode: host
+    environment:
+      POSTGRESQL_USER: postgres
+      POSTGRESQL_DATABASE: GE
+      POSTGRESQL_PASSWORD: password
+      ALLOW_EMPTY_PASSWORD: yes
+      ALLOW_IP: 0.0.0.0/0
+    volumes:
+      - GE_postgres:/bitnami/postgresql
+
+volumes:
+  GE_postgres:
