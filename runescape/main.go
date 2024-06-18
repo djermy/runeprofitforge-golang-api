@@ -13,16 +13,20 @@ const (
 	VALID_ALPHA = "abcdefghijklmnopqrstuvwxyz1234567890!&()/-+. "
 )
 
+// define struct to contain client and url
 type Runescape struct {
 	client *http.Client
 	url    url.URL
 }
 
+// define struct to contain extra json from api response
 type Valuation struct {
 	Trend string `json:"trend"`
 	Price int    `json:"price"`
 }
 
+// define main struct to contain all response json
+// ordered based on relevance to primary endpoints
 type Item struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
@@ -38,12 +42,18 @@ type Item struct {
 	Today   Valuation `json:"today"`
 }
 
+// define struct to contain official api response
 type ItemResponse struct {
 	Total int    `json:"total"`
 	Items []Item `json:"items"`
 }
 
 func New() *Runescape {
+	/*
+		Returns pointer to Runescape struct populated with relevant client and
+		url infomation.
+	*/
+
 	client := http.Client{
 		Timeout: time.Duration(10) * time.Second,
 	}
@@ -53,16 +63,20 @@ func New() *Runescape {
 			Scheme: "https",
 			Host:   "services.runescape.com",
 			Path:   "/m=itemdb_rs/api/catalogue/items.json",
-			//bs: "?category={x}&alpha={y}&page={z}",
 		},
 	}
 }
 
+// create struct method
 func (r *Runescape) GetItems(
 	category int,
 	alpha string,
 	page int,
 ) (items []Item, err error) {
+	/*
+		Builds api url with arguments, category, alphabet, page and returns
+		slice of Item from the response.
+	*/
 	queryParams := url.Values{}
 	queryParams.Add("category", fmt.Sprintf("%d", category))
 	queryParams.Add("alpha", alpha)
