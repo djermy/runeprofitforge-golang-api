@@ -13,7 +13,23 @@ services:
       ALLOW_EMPTY_PASSWORD: yes
       ALLOW_IP: 0.0.0.0/0
     volumes:
-      - GE_postgres:/bitnami/postgresql
+      - RS_postgres:/bitnami/postgresql
+
+  GE-pgadmin:
+    container_name: 'GE-pgadmin'
+    image: dpage/pgadmin4
+    ports:
+      - 5555:80
+    depends_on:
+      - GE-postgres
+    network_mode: host
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'postgres@shadow.com'
+      PGADMIN_DEFAULT_PASSWORD: 'password'
+      PGADMIN_CONFIG_LOGIN_BANNER: '"Email: postgres@shadow.com Pass: password"'
+    volumes:
+      - RS_pgadmin:/var/lib/pgadmin
 
 volumes:
-  GE_postgres:
+  RS_postgres:
+  RS_pgadmin:
